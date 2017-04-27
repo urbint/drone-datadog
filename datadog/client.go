@@ -29,7 +29,7 @@ func (c *client) SendMessage(msg *Event) error {
 		return err
 	}
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != 202 {
 		t, _ := ioutil.ReadAll(resp.Body)
 		return &Error{resp.StatusCode, string(t)}
 	}
