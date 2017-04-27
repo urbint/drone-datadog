@@ -3,6 +3,6 @@ Generates a small dockerized tool that notifies Datadog whenever a build is succ
 
 The format for the event content is:
 
-release-<environment>: <version>
+release-[environment]: [version]
 
-where <environment> is generally something like "prod" or "staging" and "version" is whatever you are using for version identification. If there is no version provided, we just use the timestamp that this is triggered.
+where [environment] is generally something like "prod" or "staging" and [version] is whatever you are using for version identification (usually a semver, a hash, or a timestamp)

@@ -9,9 +9,9 @@ import (
 )
 
 type Args struct {
-	ApiKey    string `envconfig:"api_key"`
-	Environ   string `envconfig:"environ"`
-	Version   string `envconfig:"version"`
+	ApiKey    string `envconfig:"dd_api_key"`
+	Environ   string `envconfig:"dd_release_environment"`
+	Version   string `envconfig:"dd_release_version"`
 }
 
 type DroneVars struct {
