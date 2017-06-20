@@ -6,12 +6,14 @@ import (
 
 	"github.com/kelseyhightower/envconfig"
 	"github.com/urbint/drone-datadog/datadog"
+	"github.com/urbint/drone-datadog/tags"
 )
 
 type Args struct {
-	ApiKey    string `envconfig:"dd_api_key"`
-	Environ   string `envconfig:"dd_release_environment"`
-	Version   string `envconfig:"dd_release_version"`
+	ApiKey  string   `envconfig:"dd_api_key"`
+	Environ string   `envconfig:"dd_release_environment"`
+	Version string   `envconfig:"dd_release_version"`
+	Tags    []string `envconfig:"dd_event_tags"`
 }
 
 type DroneVars struct {
@@ -49,13 +51,19 @@ func main() {
 		os.Exit(1)
 	}
 
+	if _, err := os.Stat(".tags"); err == nil {
+		fmt.Println(".tags file found, parsing")
+		vargs.Tags = append(vargs.Tags, tags.ParseFile(".tags")...)
+	}
+
 	// create the Datadog client
 	client := datadog.NewClient(vargs.ApiKey)
 
 	// generate the Datadog event
 	msg := datadog.Event{
-		Title: "release-" + vargs.Environ + ": " + vargs.Version,
-		Description:  "Pushed " + vargs.Version + " to " + vargs.Environ,
+		Title:       "release-" + vargs.Environ + ": " + vargs.Version,
+		Description: "Pushed " + vargs.Version + " to " + vargs.Environ,
+		Tags:        vargs.Tags,
 	}
 
 	// sends the message
